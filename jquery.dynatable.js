@@ -422,7 +422,7 @@
         allQueries.each(function() {
           var $this = $(this),
               q = settings.dataset.queries[$this.data('dynatable-query')];
-          $this.val(q || '');
+          if ($this.val() == "") $this.val(q || '');
         });
       }
 
