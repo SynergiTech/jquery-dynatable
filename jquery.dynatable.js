@@ -227,7 +227,8 @@
     // If ajax, sends query to ajaxUrl with queries and sorts serialized and appended in ajax data
     // otherwise, executes queries and sorts on in-page data
     if (this.settings.dataset.ajax) {
-      var _this = this;
+		data['draw'] = Date.now();
+	  var _this = this;
       var options = {
         type: _this.settings.dataset.ajaxMethod,
         dataType: _this.settings.dataset.ajaxDataType,
@@ -236,6 +237,9 @@
           _this.$element.trigger('dynatable:ajax:error', {xhr: xhr, error : error});
         },
         success: function(response) {
+			if (_this.settings.dataset.lastDraw !== undefined && response.draw < _this.settings.data.lastDraw) {
+				return;
+			}
           _this.$element.trigger('dynatable:ajax:success', response);
           // Merge ajax results and meta-data into dynatables cached data
           _this.records.updateFromJson(response);
